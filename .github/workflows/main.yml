@@ -42,7 +42,7 @@ jobs:
                 port: 22
                 source: ./backend
                 target: /home/ubuntu/
-            - name: mongo db setup and install node module and run
+            - name: mongo db setup and install node module and run backend
               uses: appleboy/ssh-action@v1.0.3
               with: 
                   host: ${{ secrets.EC2_HOST_BE }}
