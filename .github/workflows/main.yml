@@ -1,1 +1,59 @@
 
+name: Deploy Backend to EC2 Instance
+on:
+    push:
+        branches:
+            - main
+          
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: checking out code on runner
+              uses: actions/checkout@v4
+
+            - name: login and update EC2 instance
+              uses: appleboy/ssh-action@v1.0.3
+              with: 
+                  host: ${{ secrets.EC2_HOST_BE }}
+                  username: ${{ secrets.EC2_USERNAME_BE }}
+                  key: ${{ secrets.EC2_SSH_KEY_BE }}
+                  port: 22
+                  script: |
+                      whoami
+                      pwd
+                      sudo apt-get update -y
+                      sudo apt-get install -y ca-certificates curl gnupg
+                      sudo mkdir -p /etc/apt/keyrings
+                      curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+                      NODE_MAJOR=18
+                      echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+                      sudo apt-get update
+                      sudo apt install nodejs -y
+                      node -v
+                      npm -v
+                     
+            - name: copy files
+              uses: appleboy/scp-action@v0.1.7
+              with:
+                host: ${{ secrets.EC2_HOST_BE }}
+                username: ${{ secrets.EC2_USERNAME_BE }}
+                key: ${{ secrets.EC2_SSH_KEY_BE }}
+                port: 22
+                source: ./backend
+                target: /home/ubuntu/
+            - name: mongo db setup and install node module and run
+              uses: appleboy/ssh-action@v1.0.3
+              with: 
+                  host: ${{ secrets.EC2_HOST_BE }}
+                  username: ${{ secrets.EC2_USERNAME }}
+                  key: ${{ secrets.EC2_SSH_KEY }}
+                  port: 22
+                  script: |
+                      whoami
+                      pwd
+                      cd /home/ubuntu/backend/
+                      sudo echo "MONGO_URI='mongodb+srv://${{ secrets.MONGO_USERNAME }}:${{ secrets.MONGO_KEY }}@taskmanagementcluster.tsyynim.mongodb.net/travelMemory'" > .env
+                      echo "PORT=3000" >> .env
+                      sudo npm install
+                      sudo node index.js
