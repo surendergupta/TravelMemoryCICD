@@ -1,0 +1,57 @@
+name: Deploy frontend to EC2 instance
+on:
+    push:
+        branches:
+            - main
+          
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: checking out code on runner
+              uses: actions/checkout@v4
+
+            - name: login and update EC2 instance
+              uses: appleboy/ssh-action@v1.0.3
+              with: 
+                  host: ${{ secrets.EC2_HOST_FE }}
+                  username: ${{ secrets.EC2_USERNAME_FE }}
+                  key: ${{ secrets.EC2_SSH_KEY_FE }}
+                  port: 22
+                  script: |
+                      whoami
+                      pwd
+                      sudo apt-get update -y
+                      sudo apt-get install -y ca-certificates curl gnupg
+                      sudo mkdir -p /etc/apt/keyrings
+                      curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+                      NODE_MAJOR=18
+                      echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+                      sudo apt-get update
+                      sudo apt install nodejs -y
+                      node -v
+                      npm -v                                      
+                      
+            - name: copy file
+              uses: appleboy/scp-action@v0.1.7
+              with:
+                host: ${{ secrets.EC2_HOST_FE }}
+                username: ${{ secrets.EC2_USERNAME_FE }}
+                key: ${{ secrets.EC2_SSH_KEY_FE }}
+                port: 22
+                source: ./frontend
+                target: /home/ubuntu/
+            - name: chack data copied
+              uses: appleboy/ssh-action@v1.0.3
+              with: 
+                  host: ${{ secrets.EC2_HOST_FE }}
+                  username: ${{ secrets.EC2_USERNAME_FE }}
+                  key: ${{ secrets.EC2_SSH_KEY_FE }}
+                  port: 22
+                  script: |
+                      whoami
+                      pwd
+                      cd /home/ubuntu/frontend/
+                      sudo echo "export const baseUrl = 'http://${{ secrets.EC2_HOST_BE}}:3000'" > ./src/url.js
+                      npm install
+                      npm start &
