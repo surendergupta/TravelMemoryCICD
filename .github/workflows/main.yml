@@ -54,6 +54,6 @@ jobs:
                       pwd
                       cd /home/ubuntu/backend/
                       sudo echo "MONGO_URI='mongodb+srv://${{ secrets.MONGO_USERNAME }}:${{ secrets.MONGO_KEY }}@taskmanagementcluster.tsyynim.mongodb.net/travelMemory'" > .env
-                      echo "PORT=3000" >> .env
-                      sudo npm install
-                      sudo node index.js
+                      sudo echo "PORT=3000" >> .env
+                      npm install
+                      node index.js &
