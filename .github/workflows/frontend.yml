@@ -54,4 +54,9 @@ jobs:
                       cd /home/ubuntu/frontend/
                       sudo echo "export const baseUrl = 'http://${{ secrets.EC2_HOST_BE}}:3000'" > ./src/url.js
                       npm install
+                      npm audit
+                      npm audit fix
+                      npx update-browserslist-db@latest
+                      npm install -g npm@latest
+                      npm install --save-dev @babel/plugin-proposal-private-property-in-object
                       npm start &
