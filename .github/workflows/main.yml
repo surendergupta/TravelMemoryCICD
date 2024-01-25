@@ -49,6 +49,7 @@ jobs:
                   username: ${{ secrets.EC2_USERNAME_BE }}
                   key: ${{ secrets.EC2_SSH_KEY_BE }}
                   port: 22
+                  debug: true
                   script: |
                       whoami
                       pwd
