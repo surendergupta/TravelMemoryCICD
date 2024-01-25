@@ -19,6 +19,7 @@ jobs:
                   username: ${{ secrets.EC2_USERNAME_FE }}
                   key: ${{ secrets.EC2_SSH_KEY_FE }}
                   port: 22
+                  debug: true
                   script: |
                       whoami
                       pwd
@@ -49,6 +50,7 @@ jobs:
                   username: ${{ secrets.EC2_USERNAME_FE }}
                   key: ${{ secrets.EC2_SSH_KEY_FE }}
                   port: 22
+                  debug: true
                   script: |
                       whoami
                       pwd
