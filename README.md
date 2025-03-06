@@ -28,7 +28,7 @@ Data format to be added:
 }
 ```
 
-1. Create two instances for frontend and backend. Steps for creating two AWS EC2 Instances are:
+### Create two instances for frontend and backend. Steps for creating two AWS EC2 Instances are:
     1.1 Click the Launch instance button on EC2 Dashboard from left sidebar and Launch instance area section.
     1.2 In Name and tags section put the name of instance like frontend-tm-suri and got to next section
     1.3 In Application and OS Images (Amazon Machine Image) section inside Quick Start select ubuntu OS and Amazon Machine Image (AMI) select Ubuntu Server 22.04 LTS and goto next section
@@ -36,10 +36,10 @@ Data format to be added:
     1.5 In Key pair (login) section create a new key pair or existing key pair as required. SSH login its required and goto next section
     1.6 In Network settings section check the Allow SSH traffic from Anywhere IP (0.0.0.0/0). You can also select custom IP and My IP. Check Allow HTTPS traffic from the internet Tick and check Allow HTTP traffic from the internet Tick
     1.7 In Summary Section enter Number of instances 2 but 1 is default and click on Launch Instance button.
-2. Created instance page successfully like (i-02bf2a29cef0b2be5, i-04a5488bfd757ada8) click anyone instance id to show instance list that created by you (filter by key-pair) and two instance of one change name frontend-tm-suri to backend-tm-suri and save it
-3. Click on backend instance ID like (i-04a5488bfd757ada8) and show next screen Instance summary for i-04a5488bfd757ada8 (backend-tm-suri) click connect 
-4. Next screen Connect to instance click connect 
-5. Next Open Terminal type some commands
+### Created instance page successfully like (i-02bf2a29cef0b2be5, i-04a5488bfd757ada8) click anyone instance id to show instance list that created by you (filter by key-pair) and two instance of one change name frontend-tm-suri to backend-tm-suri and save it
+### Click on backend instance ID like (i-04a5488bfd757ada8) and show next screen Instance summary for i-04a5488bfd757ada8 (backend-tm-suri) click connect 
+### Next screen Connect to instance click connect 
+### Next Open Terminal type some commands
     5.1 sudo apt-get update
     5.2 sudo apt-get install -y ca-certificates curl gnupg
     5.3 sudo mkdir -p /etc/apt/keyrings
